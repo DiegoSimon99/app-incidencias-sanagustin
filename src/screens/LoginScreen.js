@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity, ActivityIndicator, Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
@@ -65,7 +65,7 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Image source={require("../../assets/img/logo_app.png")} style={styles.logo} resizeMode="contain" />
       <TextInput placeholder="Usuario" value={email} onChangeText={setEmail} style={styles.input} />
       <TextInput
         placeholder="Contraseña"
@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#f2f2f2",
   },
+  logo: { width: 180, height: 200, alignSelf: "center", marginBottom: 70 },
   title: {
     fontSize: 30,
     marginBottom: 20,

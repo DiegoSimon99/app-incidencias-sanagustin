@@ -32,6 +32,10 @@ function MainNavigator({ navigation }) {
         options={{
           drawerLabel: "Mis Incidencias",
           title: "Mis Incidencias",
+          headerStyle: {
+            backgroundColor: "#007bff", 
+          },
+          headerTintColor: "#fff",
         }}
       />
       <Drawer.Screen
@@ -76,7 +80,14 @@ export default function App() {
     <>
       <StatusBar barStyle="auto" />
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: "#007bff", // Cambia al color que desees
+            },
+            headerTintColor: "#fff", // Cambia el color del texto e íconos del headers
+          }}
+        >
           <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Main" component={MainNavigator} options={{ title: "", headerShown: false }} />
           <Stack.Screen

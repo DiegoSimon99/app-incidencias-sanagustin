@@ -196,7 +196,7 @@ const NewIncidentForm = ({ navigation }) => {
       });
 
       if (response.data.success) {
-        Alert.alert("Éxito", "Incidencia registrada correctamente");
+        Alert.alert("Éxito", response.data.message);
         navigation.goBack();
       } else {
         Alert.alert("Error", response.data.message || "Error al registrar la incidencia");

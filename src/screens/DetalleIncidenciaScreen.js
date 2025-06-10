@@ -31,10 +31,14 @@ const DetalleIncidenciaScreen = ({ route, navigation }) => {
   const [estadoId, setEstadoId] = useState("");
   const [archivo, setArchivo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [loadingForm, setLoadingForm] = useState(false);
   const [user, setUser] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [estados, setEstados] = useState([]);
+  const [description, setDescription] = useState("");
+  const [areas, setAreas] = useState([]);
+  const [areaId, setAreaId] = useState(null);
   const API_BASE_URL = Constants.expoConfig?.extra?.API_BASE_URL || Constants.manifest?.extra?.API_BASE_URL;
 
   const fetchIncidenciaDetail = async () => {
@@ -83,6 +87,22 @@ const DetalleIncidenciaScreen = ({ route, navigation }) => {
     }
   };
 
+  const fetchAreas = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/areas`);
+      if (response.data.success) {
+        const areaOptions = response.data.data.map((area) => ({
+          label: area.nombre,
+          value: area.id.toString(),
+        }));
+        setAreas(areaOptions);
+      }
+    } catch (error) {
+      Alert.alert("Error", "No se pudieron cargar las áreas");
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await AsyncStorage.getItem("@user_data");
@@ -94,6 +114,7 @@ const DetalleIncidenciaScreen = ({ route, navigation }) => {
     fetchSeguimientos();
     fetchUser();
     fetchEstados();
+    fetchAreas();
   }, [id, navigation]);
 
   const handleGuardarSeguimiento = async () => {
@@ -160,6 +181,35 @@ const DetalleIncidenciaScreen = ({ route, navigation }) => {
     return <Text style={styles.errorText}>No se encontraron detalles para esta incidencia.</Text>;
   }
 
+  const handleSubmit = async () => {
+    if (!areaId) {
+      Alert.alert("Error", "Debe seleccionar una área.");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const data = {
+        id_incidencia: id,
+        id_area: areaId,
+        descripcion: description,
+      };
+      console.log(data)
+      const response = await axios.post(`${API_BASE_URL}/incidencias/derivar`, data);
+      if (response.data.success) {
+        Alert.alert("Éxito", response.data.message);
+        navigation.goBack();
+      } else {
+        Alert.alert("Error", response.data.message || "Error al derivar la incidencia");
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "No se pudo derivar la incidencia.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <KeyboardAwareScrollView
@@ -198,6 +248,42 @@ const DetalleIncidenciaScreen = ({ route, navigation }) => {
                 </Text>
               </View>
             </View>
+            {incidencia.id_estado != 4 && user.id_perfil == 2 && (
+              <View style={styles.infoContainer}>
+                <Text style={styles.historyTitle}>Derivar Incidencia</Text>
+                <Dropdown
+                  data={areas}
+                  labelField="label"
+                  valueField="value"
+                  placeholder="Seleccione un area"
+                  value={areaId}
+                  onChange={(item) => {
+                    setAreaId(item.value);
+                  }}
+                  style={styles.dropdown}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  containerStyle={styles.dropdownContainer}
+                  search
+                  searchPlaceholder="Buscar area..."
+                />
+                <TextInput
+                  placeholder="Descripción"
+                  value={description}
+                  onChangeText={setDescription}
+                  multiline
+                  style={styles.textarea}
+                />
+                <TouchableOpacity style={styles.button} onPress={handleSubmit} disabled={isLoading}>
+                  {isLoading ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                  ) : (
+                    <Text style={styles.buttonText}>Derivar</Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+            )}
             <View style={styles.infoContainer}>
               <Text style={styles.historyTitle}>Historial de Seguimientos</Text>
               {seguimientos.map((item) => (
@@ -336,6 +422,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#eee",
     paddingTop: 15,
+    marginTop: 20,
   },
   infoRow: {
     flexDirection: "row",
@@ -497,6 +584,20 @@ const styles = StyleSheet.create({
   },
   fileButtonTextUpload: {
     color: "#333",
+    fontWeight: "bold",
+  },
+  button: {
+    backgroundColor: "#007bff",
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 5,
+    alignItems: "center",
+    marginTop: 10,
+    width: "100%",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
     fontWeight: "bold",
   },
 });
