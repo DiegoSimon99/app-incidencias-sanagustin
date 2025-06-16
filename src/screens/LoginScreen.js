@@ -65,7 +65,7 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Image source={require("../../assets/img/logo_app.png")} style={styles.logo} resizeMode="contain" />
+      <Image source={require("../../assets/img/logo.png")} style={styles.logo} resizeMode="contain" />
       <TextInput placeholder="Usuario" value={email} onChangeText={setEmail} style={styles.input} />
       <TextInput
         placeholder="Contraseña"

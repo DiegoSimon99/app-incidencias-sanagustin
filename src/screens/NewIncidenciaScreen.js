@@ -155,10 +155,6 @@ const NewIncidentForm = ({ navigation }) => {
       Alert.alert("Error", "Debe seleccionar una prioridad.");
       return;
     }
-    if (!image) {
-      Alert.alert("Error", "Debe seleccionar una imagen.");
-      return;
-    }
     if (keywords.length === 0) {
       Alert.alert("Error", "Debe agregar al menos una palabra clave.");
       return;

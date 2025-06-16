@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "app-incidencias-sanagustin",
+    "name": "Colegio San Agustín",
     "slug": "app-incidencias-sanagustin",
-    "version": "1.0.8",
+    "version": "2.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon_app.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
@@ -23,7 +23,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon_app.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
