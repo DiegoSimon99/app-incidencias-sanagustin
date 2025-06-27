@@ -2,7 +2,7 @@
   "expo": {
     "name": "Colegio San Agustín",
     "slug": "app-incidencias-sanagustin",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon_app.png",
     "userInterfaceStyle": "light",

@@ -30,6 +30,7 @@ const NewIncidentForm = ({ navigation }) => {
   const [students, setStudents] = useState([]);
   const [image, setImage] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [startTime, setStartTime] = useState(null);
 
   const API_BASE_URL = Constants.expoConfig?.extra?.API_BASE_URL || Constants.manifest?.extra?.API_BASE_URL;
 
@@ -47,6 +48,10 @@ const NewIncidentForm = ({ navigation }) => {
       value: "3",
     },
   ];
+
+  useEffect(() => {
+    setStartTime(Date.now());
+  }, []);
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -164,6 +169,8 @@ const NewIncidentForm = ({ navigation }) => {
       return;
     }
 
+    const durationSeconds = Math.floor((Date.now() - startTime) / 1000);
+
     // Crear el formData
     const formData = new FormData();
     formData.append("user_id", userData.id);
@@ -172,6 +179,7 @@ const NewIncidentForm = ({ navigation }) => {
     formData.append("palabra_clave", keywords.join(","));
     formData.append("titulo", title);
     formData.append("descripcion", description);
+    formData.append("tiempo_formulario", durationSeconds);
 
     if (image) {
       const filename = image.split("/").pop();
